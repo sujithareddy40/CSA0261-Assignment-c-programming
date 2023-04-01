@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+struct Student {
+    char name[50];
+    int roll;
+    struct tm birthday;
+    struct tm admission_date;
+};
+
+int calculate_age(struct tm birthdate, struct tm admission_date) {
+    int years = admission_date.tm_year - birthdate.tm_year;
+    if (admission_date.tm_mon < birthdate.tm_mon || (admission_date.tm_mon == birthdate.tm_mon && admission_date.tm_mday < birthdate.tm_mday)) {
+        years--;
+    }
+    return years;
+}
+
+int main() {
+    struct Student student;
+
+    printf("Enter student name: ");
+    fgets(student.name, 50, stdin);
+    student.name[strcspn(student.name, "\n")] = 0;
+
+    printf("Enter student roll number: ");
+    scanf("%d", &student.roll);
+
+    printf("Enter student birthday (dd mm yyyy): ");
+    scanf("%d %d %d", &student.birthday.tm_mday, &student.birthday.tm_mon, &student.birthday.tm_year);
+    student.birthday.tm_mon -= 1;  
+    student.birthday.tm_year -= 1900; 
+    printf("Enter student admission date (dd mm yyyy): ");
+    scanf("%d %d %d", &student.admission_date.tm_mday, &student.admission_date.tm_mon, &student.admission_date.tm_year);
+    student.admission_date.tm_mon -= 1;  
+    student.admission_date.tm_year -= 1900;  
+    int age = calculate_age(student.birthday, student.admission_date);
+    printf("Student name: %s\n", student.name);
+    printf("Roll number: %d\n", student.roll);
+    printf("Age at the time of admission: %d\n", age);
+
+    return 0;
+}
